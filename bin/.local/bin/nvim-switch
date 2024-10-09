@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/bash
 
 # if [ "${0##*/}" != "bash" ] && [ "${SHELL##*/}" != "bash" ]; then
         # echo "This script should be run with bash, not ${0##*/}"
@@ -41,24 +41,23 @@ function check_env()
   is_symlink_folder ~/.local/share/nvim || ISOK=false
   is_symlink_folder ~/.local/state/nvim || ISOK=false
   is_symlink_folder ~/.cache/nvim || ISOK=false
-#  is_symlink_folder ~/.cache/nvimpipo || ISOK=false
   echo ""
   $ISOK
 }
 
 function clear_nvim()
 {
-  rm ~/.config/nvim
-  rm ~/.local/share/nvim
-  rm ~/.local/state/nvim
-  rm ~/.cache/nvim
+  rm -f $HOME/.config/nvim
+  rm -f $HOME/.local/share/nvim
+  rm -f $HOME/.local/state/nvim
+  rm -f $HOME/.cache/nvim
 }
 
 if [[ $# -lt 1 ]]; then
   list_env
 fi
 
-if [ ! -d ~"/.config/$1" ]; then
+if [ ! -d "$HOME/.config/$1" ] && [ ! -L "$HOME/.config/$1"  ]; then
   echo -n "environment $1 not found, do you want to create it ? "
   read choice
   case $choice in
