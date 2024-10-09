@@ -1,0 +1,88 @@
+#!/bin/zsh
+
+# if [ "${0##*/}" != "bash" ] && [ "${SHELL##*/}" != "bash" ]; then
+        # echo "This script should be run with bash, not ${0##*/}"
+        # exit 1
+# fi
+
+function list_env()
+{
+  echo "env availables:"
+  echo "==============="
+  find ~/.config \( -type l -or -type d \) -iname 'nvim-*' -exec basename {} \; | sort
+  echo ""
+  echo "actual env:"
+  echo "==========="
+  env=$(readlink ~/.config/nvim)
+  basename $env
+  echo ""
+
+  check_env
+  exit 1
+}
+
+function is_symlink_folder()
+{
+  if [[ -L "$1" && -d "$1" ]]; then
+    echo "folder $1: ok"
+    true
+  else
+    echo "folder $1 should be a symlink !"
+    false
+  fi
+}
+
+function check_env()
+{
+  echo "Cheking actual env:"
+  echo "==================="
+  ISOK=true
+  is_symlink_folder ~/.config/nvim || ISOK=false
+  is_symlink_folder ~/.local/share/nvim || ISOK=false
+  is_symlink_folder ~/.local/state/nvim || ISOK=false
+  is_symlink_folder ~/.cache/nvim || ISOK=false
+#  is_symlink_folder ~/.cache/nvimpipo || ISOK=false
+  echo ""
+  $ISOK
+}
+
+function clear_nvim()
+{
+  rm ~/.config/nvim
+  rm ~/.local/share/nvim
+  rm ~/.local/state/nvim
+  rm ~/.cache/nvim
+}
+
+if [[ $# -lt 1 ]]; then
+  list_env
+fi
+
+if [ ! -d ~"/.config/$1" ]; then
+  echo -n "environment $1 not found, do you want to create it ? "
+  read choice
+  case $choice in
+  [Yy]) echo "ok, we will proceed";;
+  [Nn]) exit 1;;
+  esac
+fi
+
+if [[ ! check_env ]]; then
+  echo "ERROR: env isn't clean"
+  exit 1
+fi
+
+echo "Switch neovim to env $1"
+clear_nvim
+
+mkdir -p ~/.config/$1
+ln -s ~/.config/$1 ~/.config/nvim
+
+mkdir -p ~/.local/share/$1
+ln -s ~/.local/share/$1 ~/.local/share/nvim
+
+mkdir -p ~/.local/state/$1
+ln -s ~/.local/state/$1 ~/.local/state/nvim
+
+mkdir -p ~/.cache/$1
+ln -s ~/.cache/$1 ~/.cache/nvim
