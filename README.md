@@ -1,3 +1,10 @@
 # dotfiles
 
-use `stow --dotfiles -D [folder]` to delete a link
+To add a link:
+`stow --dotfiles [folder]`
+
+To delete a link:
+`stow --dotfiles -D [folder]`
+
+To add all:
+`bash stow-all.bash`
