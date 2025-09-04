@@ -7,5 +7,5 @@ then
 fi
 
 cd "$(dirname "$0")"
-ls -1 -d */ | xargs -I '{}' bash -c 'echo {} ; stow {}'
+ls -1 -d */ | xargs -I '{}' bash -c 'echo {} ; stow --dotfiles {}'
 
