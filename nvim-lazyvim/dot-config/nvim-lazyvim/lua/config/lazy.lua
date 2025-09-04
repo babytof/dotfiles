@@ -19,8 +19,15 @@ require("lazy").setup({
         -- add LazyVim and import its plugins
         { "LazyVim/LazyVim", import = "lazyvim.plugins" },
         -- import/override with your plugins
-        { import = "lazyvim.plugins.extras.lang.go" },
+        { import = "lazyvim.plugins.extras.coding.blink" },
+        { import = "lazyvim.plugins.extras.coding.mini-surround" },
+        { import = "lazyvim.plugins.extras.coding.yanky" },
         { import = "lazyvim.plugins.extras.dap.core" },
+        { import = "lazyvim.plugins.extras.editor.fzf" },
+        { import = "lazyvim.plugins.extras.editor.neo-tree" },
+        { import = "lazyvim.plugins.extras.ui.smear-cursor" },
+        { import = "lazyvim.plugins.extras.ui.mini-animate" },
+        { import = "lazyvim.plugins.extras.util.mini-hipatterns" },
         -- { "https://github.com/Weyaaron/nvim-training", pin = true, opts = {} },
         { import = "plugins" },
     },

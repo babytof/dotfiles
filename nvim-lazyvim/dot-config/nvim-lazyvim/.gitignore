@@ -6,3 +6,5 @@ debug
 foo.*
 *.log
 data
+# theme managed by omarchy
+lua/plugins/theme.lua
