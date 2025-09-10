@@ -33,3 +33,6 @@ vim.opt.termguicolors = true
 -- vim.opt.spelllang = "fr"
 
 -- vim.g.lazyvim_php_lsp = "intelephense"
+
+-- CURSEUR BLOCK ON INSERT MODE
+-- vim.opt.guicursor = ""

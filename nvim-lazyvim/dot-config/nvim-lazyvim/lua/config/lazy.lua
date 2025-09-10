@@ -43,9 +43,10 @@ require("lazy").setup({
     install = {
         missing = true,
         colorscheme = {
-            "kanagawa",
+            -- "kanagawa",
             -- "tokyonight",
             -- "habamax",
+            -- "everforest",
         },
     },
     opts = {

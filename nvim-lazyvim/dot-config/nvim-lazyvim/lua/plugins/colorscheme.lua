@@ -1,4 +1,6 @@
 return {
+    { "projekt0n/caret.nvim" },
+    { "neanias/everforest-nvim" },
     {
         "adisen99/apprentice.nvim",
         dependencies = { "rktjmp/lush.nvim" },
