@@ -57,8 +57,20 @@ if [[ $# -lt 1 ]]; then
   list_env
 fi
 
-if [ ! -d "$HOME/.config/$1" ] && [ ! -L "$HOME/.config/$1"  ]; then
-  echo -n "environment $1 not found, do you want to create it ? "
+if [[ $1 != nvim-* ]]; then
+    echo "Environment name should start with 'nvim-'"
+    echo -n "Do you want to use nvim-${1} ? "
+    read choice
+    case $choice in
+        [Yy]) ENV_NAME="nvim-${1}";;
+        *)    exit 1;;
+    esac
+else
+    ENV_NAME=$1
+fi
+
+if [ ! -d "$HOME/.config/${ENV_NAME}" ] && [ ! -L "$HOME/.config/${ENV_NAME}"  ]; then
+  echo -n "environment ${ENV_NAME} not found, do you want to create it ? "
   read choice
   case $choice in
   [Yy]) echo "ok, we will proceed";;
@@ -71,17 +83,17 @@ if [[ ! check_env ]]; then
   exit 1
 fi
 
-echo "Switch neovim to env $1"
+echo "Switch neovim to env ${ENV_NAME}"
 clear_nvim
 
-mkdir -p ~/.config/$1
-ln -s ~/.config/$1 ~/.config/nvim
+mkdir -p ~/.config/${ENV_NAME}
+ln -s ~/.config/${ENV_NAME} ~/.config/nvim
 
-mkdir -p ~/.local/share/$1
-ln -s ~/.local/share/$1 ~/.local/share/nvim
+mkdir -p ~/.local/share/${ENV_NAME}
+ln -s ~/.local/share/${ENV_NAME} ~/.local/share/nvim
 
-mkdir -p ~/.local/state/$1
-ln -s ~/.local/state/$1 ~/.local/state/nvim
+mkdir -p ~/.local/state/${ENV_NAME}
+ln -s ~/.local/state/${ENV_NAME} ~/.local/state/nvim
 
-mkdir -p ~/.cache/$1
-ln -s ~/.cache/$1 ~/.cache/nvim
+mkdir -p ~/.cache/${ENV_NAME}
+ln -s ~/.cache/${ENV_NAME} ~/.cache/nvim
