@@ -20,7 +20,7 @@ vim.opt.clipboard = "unnamedplus"
 vim.opt.virtualedit = "block"
 
 -- scrolloff : garde le curseur centré lors d'un scroll vertical
--- vim.opt.scrolloff = 99
+-- vim.opt.scrolloff = 100
 
 -- show the effet of substitute (%s/xx/yy/)
 -- nosplit	Shows the effects of a command incrementally in the buffer.
@@ -31,8 +31,6 @@ vim.opt.ignorecase = true
 vim.opt.termguicolors = true
 
 -- vim.opt.spelllang = "fr"
-
--- vim.g.lazyvim_php_lsp = "intelephense"
 
 -- CURSEUR BLOCK ON INSERT MODE
 -- vim.opt.guicursor = ""

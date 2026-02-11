@@ -1,9 +1,5 @@
 return {
-  {
     "NStefan002/speedtyper.nvim",
-    cmd = "Speedtyper",
-    opts = {
-      -- your config
-    },
-  },
+    branch = "v2",
+    lazy = false,
 }

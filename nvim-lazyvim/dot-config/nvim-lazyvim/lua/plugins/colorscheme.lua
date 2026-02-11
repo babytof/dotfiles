@@ -29,7 +29,8 @@ return {
         opts = {
             -- colorscheme = "kanagawa",
             -- colorscheme = "rose-pine",
-            colorscheme = "apprentice",
+            -- colorscheme = "apprentice",
+            colorscheme = "tokyonight-moon",
         },
     },
     -- Nord
