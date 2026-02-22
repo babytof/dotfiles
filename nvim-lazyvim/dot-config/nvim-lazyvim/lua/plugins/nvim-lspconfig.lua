@@ -1,3 +1,5 @@
+-- Version 1
+-- =========
 -- return {
 --     "neovim/nvim-lspconfig",
 --     opts = {
@@ -46,6 +48,8 @@
 --     },
 --     ts_ls = { enabled = true },
 -- }
+-- Version 2
+-- =========
 return {
     "neovim/nvim-lspconfig",
     opts = function(_, opts)

@@ -3,8 +3,6 @@ return {
     opts_extends = { "ensure_installed" },
     opts = {
         ensure_installed = {
-            "ansible-language-server",
-            "ansible-lint",
             "bash-language-server",
             "debugpy",
             "docker-compose-language-service",
