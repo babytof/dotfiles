@@ -1,12 +1,21 @@
 #!/bin/bash
 
 # if [ "${0##*/}" != "bash" ] && [ "${SHELL##*/}" != "bash" ]; then
-        # echo "This script should be run with bash, not ${0##*/}"
-        # exit 1
+# echo "This script should be run with bash, not ${0##*/}"
+# exit 1
 # fi
+function info() {
+  echo "actual env:"
+  echo "==========="
+  env=$(readlink ~/.config/nvim)
+  basename $env
+  echo ""
 
-function list_env()
-{
+  check_env
+  exit 1
+}
+
+function list_env() {
   echo "env availables:"
   echo "==============="
   find ~/.config \( -type l -or -type d \) -iname 'nvim-*' -exec basename {} \; | sort
@@ -21,8 +30,7 @@ function list_env()
   exit 1
 }
 
-function is_symlink_folder()
-{
+function is_symlink_folder() {
   if [[ -L "$1" && -d "$1" ]]; then
     echo "folder $1: ok"
     true
@@ -32,8 +40,7 @@ function is_symlink_folder()
   fi
 }
 
-function check_env()
-{
+function check_env() {
   echo "Cheking actual env:"
   echo "==================="
   ISOK=true
@@ -45,18 +52,16 @@ function check_env()
   $ISOK
 }
 
-function clear_nvim()
-{
+function clear_nvim() {
   rm -f $HOME/.config/nvim
   rm -f $HOME/.local/share/nvim
   rm -f $HOME/.local/state/nvim
   rm -f $HOME/.cache/nvim
 }
 
-function usage()
-{
+function usage() {
   local prog="${0##*/}"
-  cat << EOF
+  cat <<EOF
 Usage: ${prog} [OPTIONS] [ENV]
 
 Bascule Neovim vers un environnement de configuration (config, share, state, cache).
@@ -64,6 +69,8 @@ Bascule Neovim vers un environnement de configuration (config, share, state, cac
 OPTIONS
   -h, --help       Afficher cette aide
   -d, --delete     Supprimer un environnement existant
+  -i, --info       Afficher les informations sur l'environnement actuel
+  -l, --list       Affiche la liste des environnement existant
 
 COMMANDES
   ${prog}                    Menu interactif (gum) pour choisir un environnement
@@ -80,8 +87,7 @@ EXEMPLES
 EOF
 }
 
-function delete_env()
-{
+function delete_env() {
   local ENV_NAME=$1
   local PATHS=(
     "$HOME/.config/${ENV_NAME}"
@@ -114,6 +120,14 @@ if [[ "$1" == "--help" || "$1" == "-h" ]]; then
   exit 0
 fi
 
+if [[ "$1" == "--info" || "$1" == "-i" ]]; then
+  info
+fi
+
+if [[ "$1" == "--list" || "$1" == "-l" ]]; then
+  list_env
+fi
+
 # Mode suppression : --delete ou -d
 if [[ "$1" == "--delete" || "$1" == "-d" ]]; then
   shift
@@ -140,45 +154,48 @@ if [[ "$1" == "--delete" || "$1" == "-d" ]]; then
   echo -n "Confirmer la suppression de ${ENV_TO_DELETE} ? (y/N) "
   read -r choice
   case $choice in
-    [Yy]) delete_env "$ENV_TO_DELETE";;
-    *)    echo "Annulé."; exit 0;;
+  [Yy]) delete_env "$ENV_TO_DELETE" ;;
+  *)
+    echo "Annulé."
+    exit 0
+    ;;
   esac
   exit 0
 fi
 
 if [[ $# -lt 1 ]]; then
-    # Choix interactif avec gum
-    AVAILABLE_ENVS=$(find ~/.config \( -type l -or -type d \) -iname 'nvim-*' -exec basename {} \; | sort)
-    if [[ -z "$AVAILABLE_ENVS" ]]; then
-        echo "Aucun environnement nvim trouvé dans ~/.config"
-        list_env
-    fi
-    ENV_NAME=$(echo "$AVAILABLE_ENVS" | gum choose --header "Sélectionnez un environnement Neovim:")
-    [[ -z "$ENV_NAME" ]] && exit 1
+  # Choix interactif avec gum
+  AVAILABLE_ENVS=$(find ~/.config \( -type l -or -type d \) -iname 'nvim-*' -exec basename {} \; | sort)
+  if [[ -z "$AVAILABLE_ENVS" ]]; then
+    echo "Aucun environnement nvim trouvé dans ~/.config"
+    list_env
+  fi
+  ENV_NAME=$(echo "$AVAILABLE_ENVS" | gum choose --header "Sélectionnez un environnement Neovim:")
+  [[ -z "$ENV_NAME" ]] && exit 1
 elif [[ $1 != nvim-* ]]; then
-    # Vérification de l'existence du dossier avant de poser la question
-    CANDIDATE="nvim-${1}"
-    if [[ ! -d "$HOME/.config/${CANDIDATE}" && ! -L "$HOME/.config/${CANDIDATE}" ]]; then
-        echo "Environnement ${CANDIDATE} introuvable dans ~/.config"
-        exit 1
-    fi
-    echo "Environment name should start with 'nvim-'"
-    echo -n "Do you want to use ${CANDIDATE} ? "
-    read choice
-    case $choice in
-        [Yy]) ENV_NAME="${CANDIDATE}";;
-        *)    exit 1;;
-    esac
+  # Vérification de l'existence du dossier avant de poser la question
+  CANDIDATE="nvim-${1}"
+  if [[ ! -d "$HOME/.config/${CANDIDATE}" && ! -L "$HOME/.config/${CANDIDATE}" ]]; then
+    echo "Environnement ${CANDIDATE} introuvable dans ~/.config"
+    exit 1
+  fi
+  echo "Environment name should start with 'nvim-'"
+  echo -n "Do you want to use ${CANDIDATE} ? "
+  read choice
+  case $choice in
+  [Yy]) ENV_NAME="${CANDIDATE}" ;;
+  *) exit 1 ;;
+  esac
 else
-    ENV_NAME=$1
+  ENV_NAME=$1
 fi
 
-if [ ! -d "$HOME/.config/${ENV_NAME}" ] && [ ! -L "$HOME/.config/${ENV_NAME}"  ]; then
+if [ ! -d "$HOME/.config/${ENV_NAME}" ] && [ ! -L "$HOME/.config/${ENV_NAME}" ]; then
   echo -n "environment ${ENV_NAME} not found, do you want to create it ? "
   read choice
   case $choice in
-  [Yy]) echo "ok, we will proceed";;
-  [Nn]) exit 1;;
+  [Yy]) echo "ok, we will proceed" ;;
+  [Nn]) exit 1 ;;
   esac
 fi
 
